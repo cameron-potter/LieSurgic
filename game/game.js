@@ -1,8 +1,14 @@
 $(document).ready(function(){
 
-    // Running variables 
+    // General Vars
 
     var i = 0; 
+    var z = 0;
+    var current_animation;
+
+
+    // Running Vars
+
     var running = [];
     var running = [
         {
@@ -171,7 +177,7 @@ $(document).ready(function(){
             break;
 
             case 38: // up
-            running_name();
+            animation(jumping, 50);
             break;
 
             case 40: // down
@@ -226,24 +232,6 @@ $(document).ready(function(){
         }
     }
 
-    // function movement(motion, speed, space) {
-    //     // current x axis of redman, relative to left
-
-    //     $('#redman').css('background', motion[i]['background']);
-    //     $('#redman').css('width', motion[i]['width']);
-    //     $('#redman').css('height', motion[i]['height']);
-
-    //     if(i<motion.length){
-    //         $('#redman').css('background', motion[i]);
-    //         i++;
-    //         setTimeout(movement, speed);
-    //     }
-
-    //     if(i == motion.length){
-    //         i = 0;
-    //     }
-    // }
-
     function movement(motion, speed, space) {
         // current x axis of redman, relative to left
         var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
@@ -271,6 +259,21 @@ $(document).ready(function(){
     }
 
     function animation(action, frame_rate) {
+
+        // kill current animation, start new one. 
+        if(current_animation == undefined) {
+            current_animation = action;
+        }
+
+        if(current_animation != action) {
+            current_animation = action;
+            if(z==1){
+                z = 0;
+                return false;
+            }
+            z++;
+        }
+
         var key;
 
         if(i<action.length){
@@ -287,6 +290,7 @@ $(document).ready(function(){
         if(i == action.length){
             i =0;
         }
+
     }
 
     function test_animation(motion){

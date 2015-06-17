@@ -223,13 +223,16 @@ $(document).ready(function(){
         }
     }
 
+
+
     function _space(frame_rate, space) {
         return(10*(parseInt(frame_rate)/parseInt(space)));
     }
 
-    function _axis(frame_rate, space) {
+
+
+    function _xaxis(frame_rate, space) {
         var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
         var speed = _space(frame_rate, space);
 
         if($('#redman').hasClass('run_left')) {
@@ -239,11 +242,30 @@ $(document).ready(function(){
         }
 
         setTimeout(function() {
-           _axis(frame_rate, space);
-        }, 1000);
+               _axis(frame_rate, space);
+            }, _space(frame_rate, space)
+        );
+    } 
 
-        console.log(speed);
+
+
+    function _yaxis(frame_rate, space) {
+        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+        var speed = (_space(frame_rate, space);
+        space = parseInt(space)-10;
+
+        if(frame_rate)
+        $('#redman').css('bottom', (parseInt(yaxis)+1)+'px');
+
+        $('#redman').css('bottom', (parseInt(yaxis)-1)+'px');
+
+        setTimeout(function() {
+               _yaxis(frame_rate, space);
+            },speed
+        );
     }
+
+
 
     function _jumping(action, frame_rate, space, iv) {
         var key;
@@ -252,13 +274,7 @@ $(document).ready(function(){
 
         animation(action);
 
-        // if(action == jumping) {
-        //     gravity(100);
-        // }
-
-        // if(yaxis > 0) {
-        //     gravity(iv);
-        // }
+        _yaxis(frame_rate, space, iv)
 
         $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
 
@@ -284,6 +300,7 @@ $(document).ready(function(){
             i = 0;
         }
     }
+
 
     // function seconds_per_pixel (frame_rate, space) {
 

@@ -176,12 +176,12 @@ $(document).ready(function(){
             current_animation = jumping;
             // animation(jumping, 50, 10);
 
-            _jumping(jumping, 50, 10, 100);
+            _jumping(jumping, 50, 100, 10);
             break;
 
             case 40: // down
             current_animation = running;
-            motion(running, 50, 10);
+            _motion(running, 50, 10);
             // motion(running);
             break;
 
@@ -206,16 +206,16 @@ $(document).ready(function(){
     */
 
 
-    function motion(action, frame_rate, space) {
+    function _motion(action, seconds, pixels) {
         var key;
 
-        animation(action);
-        _axis(frame_rate, space);
+        _animation(action);
+        _xaxis(seconds, pixels);
 
         if(current_animation == action) {
             setTimeout(function(){
-                    motion(action, frame_rate, space)
-                }, frame_rate);
+                    _motion(action, seconds, pixels)
+                }, seconds);
 
             if(i == action.length) {
                 i = 0;
@@ -225,15 +225,15 @@ $(document).ready(function(){
 
 
 
-    function _space(frame_rate, space) {
-        return(10*(parseInt(frame_rate)/parseInt(space)));
+    function _secPerPx(seconds, pixels) {
+        return(parseInt(seconds)/parseInt(pixels));
     }
 
 
 
-    function _xaxis(frame_rate, space) {
+    function _xaxis(seconds, pixels) {
         var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-        var speed = _space(frame_rate, space);
+        var speed = _secPerPx(seconds, pixels);
 
         if($('#redman').hasClass('run_left')) {
             $('#redman').css('left', (parseInt(xaxis)-1)+'px');
@@ -242,73 +242,58 @@ $(document).ready(function(){
         }
 
         setTimeout(function() {
-               _axis(frame_rate, space);
-            }, _space(frame_rate, space)
+               _xaxis(seconds, pixels);
+            }, _secPerPx(seconds, pixels)
         );
     } 
 
 
 
-    function _yaxis(frame_rate, space) {
+    function _yaxis(seconds, pixels) {
         var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
-        var speed = (_space(frame_rate, space);
-        space = parseInt(space)-10;
+        var speed = _secPerPx(seconds, pixels);
+        
 
-        if(frame_rate)
-        $('#redman').css('bottom', (parseInt(yaxis)+1)+'px');
+        console.log(speed);
 
-        $('#redman').css('bottom', (parseInt(yaxis)-1)+'px');
+        if(speed >= 0) {
+            $('#redman').css('bottom', (parseInt(yaxis)+1)+'px');
+            setTimeout(function() {
+                pixels = parseInt(pixels)-3;
+               _yaxis(seconds, pixels);
+            },speed);
+        } 
 
-        setTimeout(function() {
-               _yaxis(frame_rate, space);
-            },speed
-        );
+        if (speed < 0) {
+            $('#redman').css('bottom', (parseInt(yaxis)-1)+'px');
+            setTimeout(function() {
+                pixels = parseInt(pixels)-3;
+               _yaxis(seconds, pixels);
+            },-speed);
+        }
+
+        
+
     }
 
 
 
-    function _jumping(action, frame_rate, space, iv) {
-        var key;
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+    function _jumping(action, seconds, pixels) {
+        // _animation(action);
+        _yaxis(seconds, pixels);
 
-        animation(action);
-
-        _yaxis(frame_rate, space, iv)
-
-        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
-
-        iv = iv - 20;
-
-        if(parseInt(yaxis) < 0 ) {
-            $('#redman').css('bottom', '0px');
-            console.log('anything');
+        if(i == action.length) {
             return false;
         }
 
-        if($('#redman').hasClass('run_left')) {
-            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
-        } else {
-            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
-        }
-
-        setTimeout(function(){
-                _jumping(action, frame_rate, space, iv)
-            }, frame_rate);
-
-        if(i == action.length) {
-            i = 0;
-        }
+        // setTimeout(function(){
+        //     _jumping(action, seconds, pixels)
+        // }, seconds);
     }
 
 
-    // function seconds_per_pixel (frame_rate, space) {
 
-    //     return seconds
-    // }
-
-    // fixing for jumping 
-     function animation(action) {
+    function _animation(action) {
         if(i<action.length) {
             for(key in action[i]) {
                 $('#redman').css(key, action[i][key])
@@ -316,25 +301,6 @@ $(document).ready(function(){
             i++;
         }
     }
-
-    // works for running 
-    // function animation(action) {
-    //     if(i<action.length) {
-    //         for(key in action[i]) {
-    //             $('#redman').css(key, action[i][key])
-    //         }
-    //         i++;
-    //     }
-    // }
-
-    function gravity(iv) {
-        console.log('gravity');
-
-        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
-
-        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
-    }
-
 
 
 

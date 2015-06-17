@@ -1,20 +1,21 @@
 $(document).ready(function(){
 
+    // 
+    var current_animation = [];
     // Running variables 
-
     var i = 0; 
     var running = [];
     var running = [
-        {
-            background:"url('redman.gif')0px 648px",
-            width:"48px",
-            height:"46px"
-        },
-        {
-            background:"url('redman.gif')-44px 648px",
-            width:"48px",
-            height:"46px"
-        },
+        // {
+        //     background:"url('redman.gif')0px 648px",
+        //     width:"48px",
+        //     height:"46px"
+        // },
+        // {
+        //     background:"url('redman.gif')-44px 648px",
+        //     width:"48px",
+        //     height:"46px"
+        // },
         {
             background:"url('redman.gif')-89px 648px",
             width:"48px",
@@ -171,13 +172,17 @@ $(document).ready(function(){
             break;
 
             case 38: // up
-            running_name();
+            // $('#redman').addClass('jumping');
+            current_animation = jumping;
+            // animation(jumping, 50, 10);
+
+            jumpingisafunction(jumping, 50, 10, 100);
             break;
 
             case 40: // down
-            // movement(running, 50, 10);
-            animation(running, 50);
-            // animation(jumping, 50);
+            current_animation = running;
+            motion(running, 50, 10);
+            // motion(running);
             break;
 
             default: return; // exit this handler for other keys
@@ -200,96 +205,100 @@ $(document).ready(function(){
     *
     */
 
-    function running_name() {
-        // current x axis of redman, relative to left
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-        var space = 10;
-        var speed = 50;
 
-        $('#redman').css('background', running[i]['background']);
-        $('#redman').css('width', running[i]['width']);
-        $('#redman').css('height', running[i]['height']);
-
-        if($('#redman').hasClass('run_left')){
-            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
-        }else{
-            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
-        }
-
-        if(i<running.length){
-            $('#redman').css('background', running[i]);
-            i++;
-            setTimeout(running_name, speed);
-        }
-        if(i == running.length){
-            i = 2;
-        }
-    }
-
-    // function movement(motion, speed, space) {
-    //     // current x axis of redman, relative to left
-
-    //     $('#redman').css('background', motion[i]['background']);
-    //     $('#redman').css('width', motion[i]['width']);
-    //     $('#redman').css('height', motion[i]['height']);
-
-    //     if(i<motion.length){
-    //         $('#redman').css('background', motion[i]);
-    //         i++;
-    //         setTimeout(movement, speed);
-    //     }
-
-    //     if(i == motion.length){
-    //         i = 0;
-    //     }
-    // }
-
-    function movement(motion, speed, space) {
-        // current x axis of redman, relative to left
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-
-        $('#redman').css('background', running[i]['background']);
-        $('#redman').css('width', running[i]['width']);
-        $('#redman').css('height', running[i]['height']);
-
-        if($('#redman').hasClass('run_left')){
-            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
-        }else{
-            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
-        }
-
-        if(i<running.length){
-            $('#redman').css('background', running[i]);
-            i++;
-            setTimeout(function(){
-                movement(motion, speed, space)
-            }, speed);
-        }
-        if(i == running.length){
-            i = 2;
-        }
-    }
-
-    function animation(action, frame_rate) {
+    function motion(action, frame_rate, space) {
         var key;
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+        console.log(yaxis);
 
-        if(i<action.length){
-            for(key in action[i]){
+        animation(action);
+
+        // if(action == jumping) {
+        //     gravity(100);
+        // }
+
+        // if(yaxis > 0) {
+        //     gravity(iv);
+        // }
+
+        if($('#redman').hasClass('run_left')) {
+            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
+        } else {
+            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
+        }
+
+        if(current_animation == action) {
+            setTimeout(function(){
+                    motion(action, frame_rate, space)
+                }, frame_rate);
+
+            if(i == action.length) {
+                i = 0;
+            }
+        }
+    }
+
+    function jumpingisafunction(action, frame_rate, space, iv) {
+        var key;
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+
+        animation(action);
+
+        // if(action == jumping) {
+        //     gravity(100);
+        // }
+
+        // if(yaxis > 0) {
+        //     gravity(iv);
+        // }
+
+        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
+        iv = iv -20;
+
+        if(parseInt(yaxis) < 0 ) {
+            $('#redman').css('bottom', '0px');
+            console.log('anything');
+            return false;
+        }
+
+        if($('#redman').hasClass('run_left')) {
+            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
+        } else {
+            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
+        }
+
+        setTimeout(function(){
+                jumpingisafunction(action, frame_rate, space, iv)
+            }, frame_rate);
+
+        if(i == action.length) {
+            i = 0;
+        }
+    }
+
+    function animation(action) {
+        if(i<action.length) {
+            for(key in action[i]) {
                 $('#redman').css(key, action[i][key])
             }
             i++;
         }
-
-        setTimeout(function(){
-                animation(action, frame_rate)
-            }, frame_rate);
-
-        if(i == action.length){
-            i =0;
-        }
     }
 
-    function test_animation(motion){
+    function gravity(iv) {
+        console.log('gravity');
+
+        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+
+        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
+    }
+
+
+
+
+    function test_animation(motion) {
         // current x axis of redman, relative to left
 
         $('#redman').css('background', motion[i]['background']);

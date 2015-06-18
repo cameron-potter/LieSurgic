@@ -157,7 +157,16 @@ $(document).ready(function(){
             width:"48px",
             height:"46px"
         },
-    ]
+    ];
+
+    var surfaces = [];
+    surfaces = [
+        {
+            width:"800px",
+            bottom: "0",
+            left: "0"
+        },
+    ];
 
 
     
@@ -177,24 +186,26 @@ $(document).ready(function(){
     $(document).keydown(function(e) {
         switch(e.which) {
             case 37: // left
-             $('#redman').addClass('run_left');
+                $('#redman').addClass('move_left');
+                $('#redman').removeClass('move_right');
             break;
 
             case 39: // right
-             $('#redman').removeClass('run_left');
+                $('#redman').addClass('move_right');
+                $('#redman').removeClass('move_left');
             break;
 
             case 38: // up
             kill ++;
             i = 0;
-             $('#redman').addClass('jumping');
+             
             current_animation = jumping;
             _jumping(jumping, 50, 10, 100, kill);
             break;
 
             case 40: // down
             i = 0;
-            $('#redman').addClass('running');
+           
             current_animation = running;
             _running(running, 50, 10);
             break;
@@ -221,70 +232,55 @@ $(document).ready(function(){
 
 
     function _running(action, frame_rate, space) {
-        // if($('#redman').hasClass('jumping')) {
-        //     return false;
-        // }
+
+        if($('#redman').hasClass('jumping')) {
+            return false;
+        }
+
+         $('#redman').addClass('running');
+
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
 
          if(current_animation != action) {
             return false;
         }
 
-        var key;
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-
         _animation(action);
-
-        if($('#redman').hasClass('run_left')) {
-            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
-        } else {
-            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
-        }
-
-        setTimeout(function(){
-                _running(action, frame_rate, space)
-            }, frame_rate);
+        _xaxis(space);
 
         if(i == action.length) {
             i = 0;
         }
+
+        setTimeout(function(){
+            _running(action, frame_rate, space)
+        }, frame_rate);
     }
 
     function _jumping(action, frame_rate, space, iv, loop) {
         if(kill != loop){
             return false;
         }
-        // var key;
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+
+        $('#redman').addClass('jumping');
+
+
         var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
 
-        if(current_animation != action) {
-            return false;
-        }
-
-
-        // Shit code to detect surface 
         if( (parseInt(yaxis)+parseInt(iv))< 0 ) {
             $('#redman').removeClass('jumping');
            return false;
         }
 
-        console.log(yaxis)
-
         _animation(action);
+        _xaxis(space);
 
         $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
         iv = iv - 20;//gravity
 
-        if($('#redman').hasClass('run_left')) {
-            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
-        } else {
-            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
-        }
-
         setTimeout(function(){
             _jumping(action, frame_rate, space, iv, loop)
         }, frame_rate);
-
     }
 
 
@@ -297,6 +293,22 @@ $(document).ready(function(){
             i++;
         }
     }
+
+    function _xaxis(space) {
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+
+        if($('#redman').hasClass('move_left')) {
+            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
+        } else {
+            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
+        }
+    }
+
+    // function _gravity(iv) {
+    //     if(!_onsurface($('#redman')));
+    // }
+
+    // function _onsurface() {}
 
 
 

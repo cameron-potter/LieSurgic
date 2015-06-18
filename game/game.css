@@ -6,7 +6,7 @@
 	bottom:0;
 	left:0;
 }
-.run_left {
+.move_left {
 	-moz-transform: scaleX(-1);
 	-o-transform: scaleX(-1);
 	-webkit-transform: scaleX(-1);
@@ -16,4 +16,8 @@
 }
 
 #arena {
+	width:800px;
+	height:1000px;
+	position:relative;
+	border:1px solid #666;
 }

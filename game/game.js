@@ -272,11 +272,45 @@ $(document).ready(function(){
         _xaxis(space);
         // _landing(space, iv);
 
-        if( (parseInt(yaxis)+parseInt(iv)) < 0 ) {
+
+
+
+        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+        var distanceToFloor = parseInt(yaxis)+parseInt(iv);
+        var surface_floor = parseInt(surfaces[0]['bottom']);
+        var surface_start = parseInt(surfaces[0]['left']);
+        var surface_width = parseInt(surfaces[0]['width']);
+        var surface_end = surface_start + surface_width;
+
+        // console.log(surface_end);
+        if($('#redman').hasClass('move_left')) {
+           var xaxisInOneFrame = parseInt(xaxis) - parseInt(space);
+        }else{
+           var xaxisInOneFrame = parseInt(xaxis) + parseInt(space);
+        }
+        console.log(xaxisInOneFrame);
+
+        if( distanceToFloor <  surface_floor && surface_start < xaxisInOneFrame < surface_end) {
             $('#redman').removeClass('jumping');
             _landing();
             return false;
-        }
+        }  
+
+
+
+
+
+
+
+
+
+
+        // if( (parseInt(yaxis)+parseInt(iv)) < 0 ) {
+        //     $('#redman').removeClass('jumping');
+        //     _landing();
+        //     return false;
+        // }
 
         $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
         iv = iv - 20;//gravity
@@ -291,14 +325,21 @@ $(document).ready(function(){
     //     var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
     //     var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
     //     var distanceToFloor = parseInt(yaxis)+parseInt(iv);
+    //     var surface_floor = parseInt(surfaces[0]['bottom']);
+    //     var surface_start = parseInt(surfaces[0]['left']);
+    //     var surface_width = parseInt(surfaces[0]['width']);
+    //     var surface_end = surface_start + surface_width;
 
-    //     if($('#redman').hasClass('.move_left')) {
+
+    //     if($('#redman').hasClass('move_left')) {
     //        var xaxisInOneFrame = parseInt(xaxis) - parseInt(space);
-    //     }else if($('#redman').hasClass('.move_right')) {
+    //     }else if($('#redman').hasClass('move_right')) {
     //        var xaxisInOneFrame = parseInt(xaxis) + parseInt(space);
     //     }
 
-    //     if( distanceToFloor < surfaces[0]['height'] && surfaces[0]['left'] <= xaxisInOneFrame <=  (surfaces[0]['left'] + surfaces[0]['width']) ) {
+    //     if( distanceToFloor < surface_floor /*&& surface_start <= xaxisInOneFrame <= surface_end*/ ) {
+    //         console.log('not here yet');
+    //         kill++;
     //         $('#redman').removeClass('jumping');
     //         $('#redman').css('bottom', '0px');
     //         i = 0;

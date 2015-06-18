@@ -4,6 +4,7 @@ $(document).ready(function(){
     var current_animation = [];
     var trigger = true;
     var initial_iv;
+    var kill = 1;
     // Running variables 
     var i = 0; 
     var running = [];
@@ -146,10 +147,15 @@ $(document).ready(function(){
             width: "40px",
             height: "59px"
         },
+        // {
+        //     background: "url('redman.gif')-541px 768px",
+        //     width: "70px",
+        //     height: "45px"
+        // },
         {
-            background: "url('redman.gif')-541px 768px",
-            width: "70px",
-            height: "45px"
+            background:"url('redman.gif')0px 648px",
+            width:"48px",
+            height:"46px"
         },
     ]
 
@@ -179,18 +185,18 @@ $(document).ready(function(){
             break;
 
             case 38: // up
-            // $('#redman').addClass('jumping');
+            kill ++;
+            i = 0;
+             $('#redman').addClass('jumping');
             current_animation = jumping;
-            // animation(jumping, 50, 10);
-
-            _jumping(jumping, 50, 10, 100);
+            _jumping(jumping, 50, 10, 100, kill);
             break;
 
             case 40: // down
-            // current_animation = running;
-            // motion(running, 50, 10);
-            test_animation(jumping)
-            // motion(running);
+            i = 0;
+            $('#redman').addClass('running');
+            current_animation = running;
+            _running(running, 50, 10);
             break;
 
             default: return; // exit this handler for other keys
@@ -214,68 +220,19 @@ $(document).ready(function(){
     */
 
 
-    function motion(action, frame_rate, space) {
-        var key;
+    function _running(action, frame_rate, space) {
+        // if($('#redman').hasClass('jumping')) {
+        //     return false;
+        // }
 
-        animation(action);
-        _axis(frame_rate, space);
-
-        if(current_animation == action) {
-            setTimeout(function(){
-                    motion(action, frame_rate, space)
-                }, frame_rate);
-
-            if(i == action.length) {
-                i = 0;
-            }
-        }
-    }
-
-    function _space(frame_rate, space) {
-        return(10*(parseInt(frame_rate)/parseInt(space)));
-    }
-
-    function _axis(frame_rate, space) {
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
-        var speed = _space(frame_rate, space);
-
-        if($('#redman').hasClass('run_left')) {
-            $('#redman').css('left', (parseInt(xaxis)-1)+'px');
-        } else {
-            $('#redman').css('left', (parseInt(xaxis)+1)+'px');
-        }
-
-        setTimeout(function() {
-           _axis(frame_rate, space);
-        }, 1000);
-
-        console.log(speed);
-    }
-
-    function _jumping(action, frame_rate, space, iv) {
-        if(trigger == true) {
-            trigger = false;
-            initial_iv = iv;
-        }
-        if(initial_iv == (-1 * iv)){
-           return false;
-        }
-        var key;
-        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
-
-        animation(action);
-
-        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
-
-        iv = iv - 20;//gravity
-
-        if(parseInt(yaxis) < 0 ) {
-            $('#redman').css('bottom', '0px');
-            console.log('anything');
+         if(current_animation != action) {
             return false;
         }
+
+        var key;
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+
+        _animation(action);
 
         if($('#redman').hasClass('run_left')) {
             $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
@@ -284,7 +241,7 @@ $(document).ready(function(){
         }
 
         setTimeout(function(){
-                _jumping(action, frame_rate, space, iv)
+                _running(action, frame_rate, space)
             }, frame_rate);
 
         if(i == action.length) {
@@ -292,13 +249,47 @@ $(document).ready(function(){
         }
     }
 
-    // function seconds_per_pixel (frame_rate, space) {
+    function _jumping(action, frame_rate, space, iv, loop) {
+        if(kill != loop){
+            return false;
+        }
+        // var key;
+        var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
 
-    //     return seconds
-    // }
+        if(current_animation != action) {
+            return false;
+        }
 
-    // fixing for jumping 
-     function animation(action) {
+
+        // Shit code to detect surface 
+        if( (parseInt(yaxis)+parseInt(iv))< 0 ) {
+            $('#redman').removeClass('jumping');
+           return false;
+        }
+
+        console.log(yaxis)
+
+        _animation(action);
+
+        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
+        iv = iv - 20;//gravity
+
+        if($('#redman').hasClass('run_left')) {
+            $('#redman').css('left', (parseInt(xaxis)-parseInt(space))+'px');
+        } else {
+            $('#redman').css('left', (parseInt(xaxis)+parseInt(space))+'px');
+        }
+
+        setTimeout(function(){
+            _jumping(action, frame_rate, space, iv, loop)
+        }, frame_rate);
+
+    }
+
+
+
+     function _animation(action) {
         if(i<action.length) {
             for(key in action[i]) {
                 $('#redman').css(key, action[i][key])
@@ -306,25 +297,6 @@ $(document).ready(function(){
             i++;
         }
     }
-
-    // works for running 
-    // function animation(action) {
-    //     if(i<action.length) {
-    //         for(key in action[i]) {
-    //             $('#redman').css(key, action[i][key])
-    //         }
-    //         i++;
-    //     }
-    // }
-
-    function gravity(iv) {
-        console.log('gravity');
-
-        var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
-
-        $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
-    }
-
 
 
 
@@ -342,7 +314,6 @@ $(document).ready(function(){
         if(i == motion.length){
             i = 0;
         }
-
     }
 
 });

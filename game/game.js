@@ -241,9 +241,9 @@ $(document).ready(function(){
 
         var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
 
-         if(current_animation != action) {
-            return false;
-        }
+        //  if(current_animation != action) {
+        //     return false;
+        // }
 
         _animation(action);
         _xaxis(space);
@@ -264,16 +264,19 @@ $(document).ready(function(){
 
         $('#redman').addClass('jumping');
 
-
         var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
 
-        if( (parseInt(yaxis)+parseInt(iv))< 0 ) {
-            $('#redman').removeClass('jumping');
-           return false;
+        if(i == 9 && (parseInt(yaxis)+parseInt(iv)) > 0){}else{
+            _animation(action);
         }
-
-        _animation(action);
         _xaxis(space);
+        // _landing(space, iv);
+
+        if( (parseInt(yaxis)+parseInt(iv)) < 0 ) {
+            $('#redman').removeClass('jumping');
+            _landing();
+            return false;
+        }
 
         $('#redman').css('bottom', (parseInt(yaxis)+parseInt(iv))+'px');
         iv = iv - 20;//gravity
@@ -283,6 +286,32 @@ $(document).ready(function(){
         }, frame_rate);
     }
 
+    // function _landing(space, iv) {
+
+    //     var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+    //     var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+    //     var distanceToFloor = parseInt(yaxis)+parseInt(iv);
+
+    //     if($('#redman').hasClass('.move_left')) {
+    //        var xaxisInOneFrame = parseInt(xaxis) - parseInt(space);
+    //     }else if($('#redman').hasClass('.move_right')) {
+    //        var xaxisInOneFrame = parseInt(xaxis) + parseInt(space);
+    //     }
+
+    //     if( distanceToFloor < surfaces[0]['height'] && surfaces[0]['left'] <= xaxisInOneFrame <=  (surfaces[0]['left'] + surfaces[0]['width']) ) {
+    //         $('#redman').removeClass('jumping');
+    //         $('#redman').css('bottom', '0px');
+    //         i = 0;
+    //         current_animation = running;
+    //         _running(running, 50, 10);
+    //     }             
+    // }
+    function _landing() {
+        $('#redman').css('bottom', '0px');
+        i = 0;
+        current_animation = running;
+        _running(running, 50, 10);
+    }
 
 
      function _animation(action) {
@@ -304,15 +333,19 @@ $(document).ready(function(){
         }
     }
 
+
     // function _gravity(iv) {
-    //     if(!_onsurface($('#redman')));
+    //     // if(!_onsurface($('#redman')));
     // }
 
-    // function _onsurface() {}
+    // function _onsurface() {
+    //    var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' ); 
+    //    var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+    // }
 
 
 
-    function test_animation(motion) {
+    function _test_animation(motion) {
         // current x axis of redman, relative to left
 
         $('#redman').css('background', motion[i]['background']);

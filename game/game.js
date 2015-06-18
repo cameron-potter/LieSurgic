@@ -176,7 +176,7 @@ $(document).ready(function(){
             current_animation = jumping;
             // animation(jumping, 50, 10);
 
-            _jumping(jumping, 50, 100, 10);
+            _jumping(jumping, 500, 10);
             break;
 
             case 40: // down
@@ -226,7 +226,7 @@ $(document).ready(function(){
 
 
     function _secPerPx(seconds, pixels) {
-        return(parseInt(seconds)/parseInt(pixels));
+        return(parseInt(pixels)/parseInt(seconds));
     }
 
 
@@ -252,28 +252,16 @@ $(document).ready(function(){
     function _yaxis(seconds, pixels) {
         var yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
         var speed = _secPerPx(seconds, pixels);
-        
+        var gravity = 20;
+        var pos_speed = Math.sqrt(Math.pow(speed, 2));
 
-        console.log(speed);
+        $('#redman').css('bottom', (parseInt(yaxis)+(speed/pos_speed))+'px');
+        setTimeout(function() {
+            seconds = parseInt(seconds) + gravity;
+           _yaxis(seconds, pixels);
+        },pos_speed );
 
-        if(speed >= 0) {
-            $('#redman').css('bottom', (parseInt(yaxis)+1)+'px');
-            setTimeout(function() {
-                pixels = parseInt(pixels)-3;
-               _yaxis(seconds, pixels);
-            },speed);
-        } 
-
-        if (speed < 0) {
-            $('#redman').css('bottom', (parseInt(yaxis)-1)+'px');
-            setTimeout(function() {
-                pixels = parseInt(pixels)-3;
-               _yaxis(seconds, pixels);
-            },-speed);
-        }
-
-        
-
+        console.log(seconds);
     }
 
 

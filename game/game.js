@@ -402,4 +402,6 @@ $(document).ready(function(){
         }
     }
 
+    var v = 15;
+    while(v--) console.log('decreasing');
 });

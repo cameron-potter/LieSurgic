@@ -1,0 +1,23 @@
+#redman {
+	width:48px;
+	height:46px;
+	background: url('redman.gif')0px 648px;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+.move_left {
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+	filter: FlipH;
+	-ms-filter: "FlipH";
+}
+
+#arena {
+	width:800px;
+	height:1000px;
+	position:relative;
+	border:1px solid #666;
+}

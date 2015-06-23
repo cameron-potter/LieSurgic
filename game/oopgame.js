@@ -20,6 +20,10 @@ character.prototype.state = function () {
     // return 'who';
 }
 
+character.prototype.onSurface = function () {
+    
+}
+
 
 character.prototype.animation = function () {
     switch(this.state) {

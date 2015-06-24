@@ -7,15 +7,19 @@ function character () {
     this.fr = 0;
     this.fps = 2;
     this.direction = '';
+    this.gravity = 3;
 }
 
 character.prototype.state = function () {
 
     var state
 
-    this.onSurface() && this.iv == 0    ? state = 'running': null;
+    this.onSurface() && this.iv <= 0    ? state = 'running': null;
     this.iv > 0                         ? state = 'jumping': null;
     !this.onSurface() && this.iv <= 0   ? state = 'falling': null;
+    // this.nearSurface()                  ? state = 'landing': null;
+
+    console.log(state);
 
     return state;
 }
@@ -67,10 +71,119 @@ character.prototype.animation = function () {
         break;
 
         case 'jumping':
-            
+
+            $('#redman').css('bottom', (parseInt(this.yaxis)+this.iv)+'px');
+            this.iv -= this.gravity;
+
+            // if(this.counter<this.fps) {
+            //     this.counter++;
+            // } else if (this.fr<jumping.length) {
+            //     this.counter = 0;
+            //     for(key in jumping[this.fr]) {
+            //         $('#redman').css(key, running[this.fr][key])
+            //     }
+            //     this.fr++;
+            // }
+
+            if(this.iv > 30){
+                // alert('greater tah twienr');
+                this.fr = 0;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(29>this.iv >0) {
+                // alert('less than twent');
+                this.fr = 1;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
         break;
 
         case 'falling':
+
+            $('#redman').css('bottom', (parseInt(this.yaxis)+this.iv)+'px');
+            this.iv -= this.gravity;
+
+            if(this.iv > 10{
+                // alert('greater tah twienr');
+                this.fr = 0;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(9>this.iv >20) {
+                // alert('less than twent');
+                this.fr = 1;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(19>this.iv >40) {
+                // alert('less than twent');
+                this.fr = 2;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(39>this.iv >100) {
+                // alert('less than twent');
+                this.fr = 3;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(99>this.iv >200) {
+                // alert('less than twent');
+                this.fr = 2;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(199>this.iv >400) {
+                // alert('less than twent');
+                this.fr = 5;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+            if(399>this.iv >1000) {
+                // alert('less than twent');
+                this.fr = 6;
+                for(key in jumping[this.fr]) {
+                    $('#redman').css(key, jumping[this.fr][key])
+                }
+                this.fr = 0;
+                this.counter = 0; 
+            }
+
+
+            console.log(this.iv);
 
         break;
 
@@ -223,11 +336,11 @@ var running = [
 ];
 
 var jumping = [
-    {
-        background: "url('redman.gif')-59px 787px",
-        width: "44px",
-        height: "56px"
-    },
+    // {
+    //     background: "url('redman.gif')-59px 787px",
+    //     width: "44px",
+    //     height: "56px"
+    // },
     {
         background: "url('redman.gif')-110px 787px",
         width: "43px",
@@ -238,6 +351,54 @@ var jumping = [
         width: "43px",
         height: "57px"
     },
+    // {
+    //     background: "url('redman.gif')-213px 788px",
+    //     width: "43px",
+    //     height: "56px"
+    // },
+    // {
+    //     background: "url('redman.gif')-263px 788px",
+    //     width: "39px",
+    //     height: "52px"
+    // },
+    // {
+    //     background: "url('redman.gif')-308px 788px",
+    //     width: "40px",
+    //     height: "55px"
+    // },
+    // {
+    //     background: "url('redman.gif')-353px 788px",
+    //     width: "36px",
+    //     height: "64px"
+    // },
+    // {
+    //     background: "url('redman.gif')-398px 797px",
+    //     width: "35px",
+    //     height: "77px"
+    // },
+    // {
+    //     background: "url('redman.gif')-443px 800px",
+    //     width: "35px",
+    //     height: "79px"
+    // },
+    // {
+    //     background: "url('redman.gif')-488px 782px",
+    //     width: "40px",
+    //     height: "59px"
+    // },
+    // {
+    //     background: "url('redman.gif')-541px 768px",
+    //     width: "70px",
+    //     height: "45px"
+    // },
+    // {
+    //     background:"url('redman.gif')0px 648px",
+    //     width:"48px",
+    //     height:"46px"
+    // },
+];
+
+var falling = [ 
     {
         background: "url('redman.gif')-213px 788px",
         width: "43px",
@@ -267,21 +428,6 @@ var jumping = [
         background: "url('redman.gif')-443px 800px",
         width: "35px",
         height: "79px"
-    },
-    {
-        background: "url('redman.gif')-488px 782px",
-        width: "40px",
-        height: "59px"
-    },
-    // {
-    //     background: "url('redman.gif')-541px 768px",
-    //     width: "70px",
-    //     height: "45px"
-    // },
-    {
-        background:"url('redman.gif')0px 648px",
-        width:"48px",
-        height:"46px"
     },
 ];
 

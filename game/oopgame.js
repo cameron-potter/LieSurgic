@@ -1,21 +1,22 @@
 
 
 function character () {
-    this.xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-    this.yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
     this.lndgFr = 20;
     this.iv = 0;
     this.counter = 0;
     this.fr = 0;
     this.fps = 2;
+    this.direction = '';
 }
 
 character.prototype.state = function () {
+
     var state
-    this.onSurface() && this.iv == 0 ? state =  'running' : null;
-    !this.onSurface() && this.iv > 0 ? state = 'jumping' : null;
-    !this.onSurface() && this.iv <= 0 ? state = 'falling' : null;
-    console.log(state);
+
+    this.onSurface() && this.iv == 0    ? state = 'running': null;
+    this.iv > 0                         ? state = 'jumping': null;
+    !this.onSurface() && this.iv <= 0   ? state = 'falling': null;
+
     return state;
 }
 
@@ -31,17 +32,24 @@ character.prototype.onSurface = function () {
     return false;
 }
 
+character.prototype.position = function () {
+    this.xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+    this.yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
+}
 
 character.prototype.animation = function () {
+    this.position();
     switch(this.state()) {
         case 'running':
-            this.xaxis = parseInt(this.xaxis) + 4;
 
-            if ( $('#redman').hasClass('right') ) {
-                $('#redman').css('left', this.xaxis+'px');
-            } else if ( $('#redman').hasClass('left')) {
-                $('#redman').css('left', this.xaxis-'px');
+            if ( this.direction == 'right' ) {
+                $('#redman').css('left', (parseInt(this.xaxis) + 4)+'px');
+                $('#redman').removeClass('move_left');
+            } else if (this.direction == 'left') {
+                $('#redman').css('left', (parseInt(this.xaxis) - 4)+'px');
+                $('#redman').addClass('move_left');
             }
+
             if(this.counter<this.fps) {
                 this.counter++;
             } else if (this.fr<running.length) {
@@ -81,36 +89,34 @@ character.prototype.animation = function () {
 window.onload = function () {
 
     start();
-
-
-
 };
 
 function start() {
+    
     character = new character();
 
-$(document).keydown(function(e) {
-    switch(e.which) {
-        case 37: // left
-            
-        break;
+    $(document).keydown(function(e) {
+        switch(e.which) {
+            case 37: // left
+                character.direction = 'left';            
+            break;
 
-        case 39: // right
-           
-        break;
+            case 39: // right
+               character.direction = 'right';
+            break;
 
-        case 38: // up
-            character.iv = 40;
-        break;
+            case 38: // up
+                character.iv = 40;
+            break;
 
-        case 40: // down
-           character.iv = 0;
-        break;
+            case 40: // down
+               character.iv = 0;
+            break;
 
-        default: return; // exit this handler for other keys
-    }
-    e.preventDefault(); // prevent the default action (scroll / move caret)
-});
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
 
     update();
 }
@@ -287,4 +293,4 @@ var surfaces = [
         },
     ];
 
-    // line 32... can be removed 
+    // line 44... if ( this.direction == 'right' ) {...to 50 reduced 

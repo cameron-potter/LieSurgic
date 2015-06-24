@@ -17,12 +17,19 @@ character.prototype.state = function () {
     this.onSurface() && this.iv <= 0    ? state = 'running': null;
     this.iv > 0                         ? state = 'jumping': null;
     !this.onSurface() && this.iv <= 0   ? state = 'falling': null;
-    // this.nearSurface()                  ? state = 'landing': null;
+    // this.landing()                  ? state = 'landing': null;
+    // if surface , and direction will cross, land on surface 
 
     console.log(state);
 
     return state;
 }
+
+// character.prototype.landing = function () {
+//    if(path is past = surface) {
+//     return true
+//    } 
+// }
 
 character.prototype.onSurface = function () {
     for(var i = 0; i < surfaces.length; i++) {
@@ -75,18 +82,7 @@ character.prototype.animation = function () {
             $('#redman').css('bottom', (parseInt(this.yaxis)+this.iv)+'px');
             this.iv -= this.gravity;
 
-            // if(this.counter<this.fps) {
-            //     this.counter++;
-            // } else if (this.fr<jumping.length) {
-            //     this.counter = 0;
-            //     for(key in jumping[this.fr]) {
-            //         $('#redman').css(key, running[this.fr][key])
-            //     }
-            //     this.fr++;
-            // }
-
             if(this.iv > 30){
-                // alert('greater tah twienr');
                 this.fr = 0;
                 for(key in jumping[this.fr]) {
                     $('#redman').css(key, jumping[this.fr][key])
@@ -95,8 +91,7 @@ character.prototype.animation = function () {
                 this.counter = 0; 
             }
 
-            if(29>this.iv >0) {
-                // alert('less than twent');
+            if(29>this.iv && this.iv >0) {
                 this.fr = 1;
                 for(key in jumping[this.fr]) {
                     $('#redman').css(key, jumping[this.fr][key])
@@ -109,61 +104,65 @@ character.prototype.animation = function () {
 
         case 'falling':
 
+
+            // landing(); --- only once falling test for landing.
             $('#redman').css('bottom', (parseInt(this.yaxis)+this.iv)+'px');
             this.iv -= this.gravity;
 
-            if(this.iv > 10{
-                // alert('greater tah twienr');
+            if(this.iv > -10) {
+                alert('10');
                 this.fr = 0;
-                for(key in jumping[this.fr]) {
-                    $('#redman').css(key, jumping[this.fr][key])
+                for(key in falling[this.fr]) {
+                    $('#redman').css(key, falling[this.fr][key])
                 }
                 this.fr = 0;
                 this.counter = 0; 
             }
 
-            if(9>this.iv >20) {
-                // alert('less than twent');
+            if(-11>this.iv && this.iv >-20) {
+                alert('20');
                 this.fr = 1;
-                for(key in jumping[this.fr]) {
-                    $('#redman').css(key, jumping[this.fr][key])
+                for(key in falling[this.fr]) {
+                    $('#redman').css(key, falling[this.fr][key])
                 }
                 this.fr = 0;
                 this.counter = 0; 
             }
 
-            if(19>this.iv >40) {
-                // alert('less than twent');
+            if(-21>this.iv && this.iv >-40) {
+                alert('40');
                 this.fr = 2;
-                for(key in jumping[this.fr]) {
-                    $('#redman').css(key, jumping[this.fr][key])
+                for(key in falling[this.fr]) {
+                    $('#redman').css(key, falling[this.fr][key])
                 }
                 this.fr = 0;
                 this.counter = 0; 
             }
 
-            if(39>this.iv >100) {
-                // alert('less than twent');
+            if(-41>this.iv && this.iv >-100) {
+                alert('100');
                 this.fr = 3;
-                for(key in jumping[this.fr]) {
-                    $('#redman').css(key, jumping[this.fr][key])
+                for(key in falling[this.fr]) {
+                    $('#redman').css(key, falling[this.fr][key])
                 }
                 this.fr = 0;
                 this.counter = 0; 
             }
 
-            if(99>this.iv >200) {
-                // alert('less than twent');
+            // animation dosen't pass here
+
+            if(-101>this.iv && this.iv >-200) {
+                // alert('200');
                 this.fr = 2;
-                for(key in jumping[this.fr]) {
-                    $('#redman').css(key, jumping[this.fr][key])
+                for(key in falling[this.fr]) {
+                    $('#redman').css(key, falling[this.fr][key])
                 }
                 this.fr = 0;
                 this.counter = 0; 
             }
 
-            if(199>this.iv >400) {
-                // alert('less than twent');
+            if(-201>this.iv && this.iv >-400) {
+                // alert('400');
                 this.fr = 5;
                 for(key in jumping[this.fr]) {
                     $('#redman').css(key, jumping[this.fr][key])
@@ -172,8 +171,8 @@ character.prototype.animation = function () {
                 this.counter = 0; 
             }
 
-            if(399>this.iv >1000) {
-                // alert('less than twent');
+            if(-401> this.iv && this.iv >-1000) {
+                // alert('1000');
                 this.fr = 6;
                 for(key in jumping[this.fr]) {
                     $('#redman').css(key, jumping[this.fr][key])
@@ -188,6 +187,11 @@ character.prototype.animation = function () {
         break;
 
         case 'landing':
+
+            // xaxis = surface
+            // fr = what ever
+            // iv = 0
+            // ie. onSurface && iv == 0 = running 
            
         break;
 
@@ -440,3 +444,5 @@ var surfaces = [
     ];
 
     // line 44... if ( this.direction == 'right' ) {...to 50 reduced 
+    // intergrate fluid jumping/landing onto surfaces animation 
+    // --> simplify code

@@ -1,41 +1,46 @@
 
 
 function character () {
+    this.xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
+    this.yaxis = ($('#redman').css('bottom')).replace ( /[^\d.]/g, '' );
     this.lndgFr = 20;
     this.iv = 0;
-    this.onSurface = true;
-    this.state();
-    this.animation();
     this.counter = 0;
     this.fr = 0;
     this.fps = 2;
-    
 }
 
 character.prototype.state = function () {
-    this.onSurface && this.iv == 0 ? this.state =  'running' : null;
-    this.iv > 0 ? this.state = 'jumping' : null;
-    this.iv < 0 ? this.state = 'falling' : null;
-    // fromSurface <= this.lndgFr && iv <= 0 ? this.state = 'landing' : null;
-    // return 'who';
+    var state
+    this.onSurface() && this.iv == 0 ? state =  'running' : null;
+    !this.onSurface() && this.iv > 0 ? state = 'jumping' : null;
+    !this.onSurface() && this.iv <= 0 ? state = 'falling' : null;
+    console.log(state);
+    return state;
 }
 
 character.prototype.onSurface = function () {
-    
+    for(var i = 0; i < surfaces.length; i++) {
+        var floor = surfaces[i]['bottom'];
+        var fl_start = surfaces[i]['left'];
+        var fl_width = surfaces[i]['width']+surfaces[i]['left'];
+        if( this.yaxis == floor && fl_start <= this.xaxis && this.xaxis <= fl_width ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
 character.prototype.animation = function () {
-    switch(this.state) {
+    switch(this.state()) {
         case 'running':
-            var xaxis = ($('#redman').css('left')).replace ( /[^\d.]/g, '' );
-            xaxis = parseInt(xaxis) + 4;
-            console.log(xaxis);
+            this.xaxis = parseInt(this.xaxis) + 4;
 
             if ( $('#redman').hasClass('right') ) {
-                $('#redman').css('left', xaxis+'px');
+                $('#redman').css('left', this.xaxis+'px');
             } else if ( $('#redman').hasClass('left')) {
-                $('#redman').css('left', xaxis-'px');
+                $('#redman').css('left', this.xaxis-'px');
             }
             if(this.counter<this.fps) {
                 this.counter++;
@@ -54,15 +59,15 @@ character.prototype.animation = function () {
         break;
 
         case 'jumping':
-            this.animation = 'like a fox';
+            
         break;
 
         case 'falling':
-            this.animation = 'falling';
+
         break;
 
         case 'landing':
-            this.animation = 'landing';
+           
         break;
 
         default:
@@ -71,7 +76,8 @@ character.prototype.animation = function () {
     }
     return true;
 }
-// var x =0;
+
+
 window.onload = function () {
 
     start();
@@ -81,13 +87,13 @@ window.onload = function () {
 function start() {
 
     character = new character();
+
     update();
 }
 
 function update() {
 
     character.animation();
-    // console.log(x);
 
     requestAnimFrame(update);
 }
@@ -248,4 +254,13 @@ var jumping = [
         height:"46px"
     },
 ];
-// this.iv || iv . needs to decrease each 60fps. 
+
+var surfaces = [
+        {
+            width:800,
+            bottom: 0,
+            left: 0,
+        },
+    ];
+
+    // line 32... can be removed 
